@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Serviço PHP/Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../biblioteca:/var/www/html/biblioteca
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  # Serviço do banco PostgreSQL
+  db:
+    image: postgres:15
+    container_name: laravel_db
+    restart: always
+    environment:
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: laravel
+      POSTGRES_DB: laravel
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel
+    volumes:
+      - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./postgresql/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+
+networks:
+  laravel:
+
+volumes:
+  pgdata:
