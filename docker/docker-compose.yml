@@ -10,6 +10,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - pgdata:/var/lib/postgresql/data
       - ../biblioteca:/var/www/html/biblioteca
     depends_on:
       - db
