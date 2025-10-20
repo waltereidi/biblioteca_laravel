@@ -69,7 +69,7 @@ jobs:
           script: |
             cd /var/www/html/biblioteca
             echo "$envs" > .env
-            echo $envs
+            echo "$envs"
             chmod 600 .env
 
       - name: Run remote commands
