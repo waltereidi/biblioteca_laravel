@@ -26,7 +26,12 @@ jobs:
         run: |
           cd ./biblioteca
           composer install --no-progress --no-suggest --prefer-dist
-
+      
+      - name: Create .env file
+        run: |
+          cd ./biblioteca
+          cp .env.example .env
+          
       - name: Generate app key
         run: |
           cd ./biblioteca
