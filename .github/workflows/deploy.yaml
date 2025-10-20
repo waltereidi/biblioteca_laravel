@@ -42,6 +42,7 @@ jobs:
     name: Deploy to Server via SSH
     needs: laravel-tests
     runs-on: ubuntu-22.04
+    environment: production
 
     steps:
       - name: Checkout code
@@ -55,7 +56,20 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           source: "./biblioteca/*"
-          target: "/var/www/html/biblioteca"
+          target: "/var/www/html"
+
+      - name: Upload .env from secret
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: ENV_PRODUCTION
+          script: |
+            cd /var/www/html/biblioteca
+            echo "${{ secrets.ENV_PRODUCTION }}" > .env
+            chmod 600 .env
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
