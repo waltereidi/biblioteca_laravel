@@ -31,19 +31,44 @@ jobs:
         run: |
           cd ./biblioteca
           cp .env.example .env
-          
+
       - name: Generate app key
         run: |
           cd ./biblioteca
           php artisan key:generate
 
-      - name: Run migrations
-        env:
-          DB_CONNECTION: pgsql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel
-          DB_USERNAME: laravel
-          DB_PASSWORD: laravel
-        run: php artisan migrate --force
+deploy:
+    name: Deploy to Server via SSH
+    needs: laravel-tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "./biblioteca/*"
+          target: "/var/www/html/biblioteca"
+
+      - name: Run remote commands
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/html/biblioteca
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            sudo systemctl restart nginx
 
