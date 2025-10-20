@@ -26,10 +26,9 @@ jobs:
         run: |
           cd ./biblioteca
           composer install --no-progress --no-suggest --prefer-dist
-          cd ..
 
       - name: Copy .env
-        run: cp .env.example .env
+        run: cp ./biblioteca/env.example ./biblioteca/env
 
       - name: Generate app key
         run: php artisan key:generate
