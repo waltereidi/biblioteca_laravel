@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   laravel-tests:
     runs-on: ubuntu-22.04
@@ -37,38 +38,37 @@ jobs:
           cd ./biblioteca
           php artisan key:generate
 
-    deploy:
-      name: Deploy to Server via SSH
-      needs: laravel-tests
-      runs-on: ubuntu-22.04
+  deploy:
+    name: Deploy to Server via SSH
+    needs: laravel-tests
+    runs-on: ubuntu-22.04
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        - name: Copy files to server
-          uses: appleboy/scp-action@v0.1.7
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.EC2_SSH_PEM }}
-            port: ${{ secrets.SSH_PORT }}
-            source: "./biblioteca/*"
-            target: "/var/www/html/biblioteca"
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "./biblioteca/*"
+          target: "/var/www/html/biblioteca"
 
-        - name: Run remote commands
-          uses: appleboy/ssh-action@v1.2.1
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.EC2_SSH_PEM }}
-            port: ${{ secrets.SSH_PORT }}
-            script: |
-              cd /var/www/html/biblioteca
-              composer install --no-interaction --prefer-dist --optimize-autoloader
-              php artisan migrate --force
-              php artisan config:cache
-              php artisan route:cache
-              php artisan view:cache
-              sudo systemctl restart nginx
-
+      - name: Run remote commands
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/html/biblioteca
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            sudo systemctl restart nginx
