@@ -28,7 +28,9 @@ jobs:
           composer install --no-progress --no-suggest --prefer-dist
 
       - name: Generate app key
-        run: php artisan key:generate
+        run: |
+          cd ./biblioteca
+          php artisan key:generate
 
       - name: Run migrations
         env:
