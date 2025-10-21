@@ -38,7 +38,7 @@ jobs:
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
             cat <<'EOF' > /var/www/html/biblioteca/.env
-            "$envs"
+            $envs
             EOF
 
       - name: Run remote commands
