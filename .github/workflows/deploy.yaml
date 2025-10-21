@@ -40,8 +40,8 @@ jobs:
             echo "Criando arquivo .env remoto..."
             # Aqui usamos cat <<EOF (sem aspas) para expandir a variável
             cat <<EOF > /var/www/html/biblioteca/.env
-        $envs
-        EOF
+          $envs
+          EOF
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
