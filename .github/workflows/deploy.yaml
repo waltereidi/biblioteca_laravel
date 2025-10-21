@@ -38,8 +38,8 @@ jobs:
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
             cat <<EOF > /var/www/html/biblioteca/.env
-$envs
-EOF
+            $envs
+            EOF
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
