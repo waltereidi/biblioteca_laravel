@@ -9,9 +9,6 @@ on:
       - main
 
 jobs:
-  laravel-tests:
-    runs-on: ubuntu-22.04
-
   deploy:
     name: Deploy to Server via SSH
     needs: laravel-tests
