@@ -39,7 +39,7 @@ jobs:
           script: |
             echo "Criando arquivo .env remoto..."
             # Aqui usamos cat <<EOF (sem aspas) para expandir a variável
-            $file=$(cat <<EOF "$envs")
+            $ file=$(cat <<EOF "$envs")
 
             cat <<EOF > /var/www/html/biblioteca/.env
             $file
