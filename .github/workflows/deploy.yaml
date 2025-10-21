@@ -67,8 +67,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
-            cd /var/www/html/biblioteca
-            echo "$envs" > .env
+            echo "$envs" > /var/www/html/biblioteca/.env
             echo "$envs"
             chmod 600 .env
 
