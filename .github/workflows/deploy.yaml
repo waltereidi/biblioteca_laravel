@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          envs: ${{ secrets.ENV_PRODUCTION }}
+          envs: ${{ vars.ENV_PRODUCTION }}
           script: |
             cd /var/www/html/biblioteca
             echo "$envs" > .env
