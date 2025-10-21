@@ -38,8 +38,8 @@ jobs:
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
             cat <<'EOF' > /var/www/html/biblioteca/.env
-            echo 'Arquivo .env : $(cat /var/www/html/biblioteca/.env)'
-            chmod 600 /var/www/html/biblioteca/.env
+            ${ENV_PRODUCTION}
+            EOF
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
