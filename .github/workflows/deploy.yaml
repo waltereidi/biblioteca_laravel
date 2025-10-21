@@ -40,6 +40,7 @@ jobs:
             cat <<EOF > /var/www/html/biblioteca/.env
             $envs
             EOF
+            echo "$envs"
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
