@@ -12,32 +12,6 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-22.04
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, bcmath, pdo_mysql, curl, xml, zip
-          ini-values: post_max_size=256M, upload_max_filesize=256M
-      
-      - name: Install Composer dependencies
-        run: |
-          cd ./biblioteca
-          composer install --no-progress --no-suggest --prefer-dist
-      
-      - name: Create .env file
-        run: |
-          cd ./biblioteca
-          cp .env.example .env
-
-      - name: Generate app key
-        run: |
-          cd ./biblioteca
-          php artisan key:generate
-
   deploy:
     name: Deploy to Server via SSH
     needs: laravel-tests
@@ -57,19 +31,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "./biblioteca/*"
           target: "/var/www/html"
-
-      - name: Upload .env from secret
-        uses: appleboy/ssh-action@v1.2.1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.EC2_SSH_PEM }}
-          port: ${{ secrets.SSH_PORT }}
-          envs: ${{ vars.ENV_PRODUCTION }}
-          script: |
-            echo "$envs" > /var/www/html/biblioteca/.env
-            echo "Arquivo .env : $(cat /var/www/html/biblioteca/.env)"
-            chmod 600 /var/www/html/biblioteca/.env
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
