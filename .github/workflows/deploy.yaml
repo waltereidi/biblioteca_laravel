@@ -28,20 +28,23 @@ jobs:
           source: "./biblioteca/*"
           target: "/var/www/html"
 
-      - name: Upload .env from secret
+      - name: Upload .env from variable
         uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          envs: ENV_PRODUCTION
-        env:
-          ENV_PRODUCTION: ${{ vars.ENV_PRODUCTION }}
-        script: |
+          envs: ${{ vars.ENV_PRODUCTION }}
+          script: |
+            echo "Criando arquivo .env remoto..."
+            # O heredoc com 'EOF' evita interpretação de variáveis ou aspas
             cat <<'EOF' > /var/www/html/biblioteca/.env
-            $ENV_PRODUCTION
+            $envs
             EOF
+
+            echo "Conteúdo gerado:"
+            cat /var/www/html/biblioteca/.env
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
