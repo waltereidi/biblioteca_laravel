@@ -68,7 +68,7 @@ jobs:
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
             echo "$envs" > /var/www/html/biblioteca/.env
-            echo "$(cat .env)"
+            echo "Arquivo .env : $(cat /var/www/html/biblioteca/.env)"
             chmod 600 /var/www/html/biblioteca/.env
 
       - name: Run remote commands
