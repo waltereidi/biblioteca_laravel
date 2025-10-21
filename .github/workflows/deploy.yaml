@@ -37,7 +37,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
-            printf '%s\n' "$envs" > /var/www/html/biblioteca/.env
+            cat <<EOF > /var/www/html/biblioteca/.env
+$envs
+EOF
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
