@@ -37,7 +37,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: ${{ vars.ENV_PRODUCTION }}
           script: |
-            echo '$envs' > /var/www/html/biblioteca/.env
+            cat <<'EOF' > /var/www/html/biblioteca/.env
             echo 'Arquivo .env : $(cat /var/www/html/biblioteca/.env)'
             chmod 600 /var/www/html/biblioteca/.env
 
