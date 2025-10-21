@@ -36,12 +36,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           envs: ${{ vars.ENV_PRODUCTION }}
-        script: |
-          echo "Criando arquivo .env remoto..."
-          # Aqui usamos cat <<EOF (sem aspas) para expandir a variável
-          cat <<EOF > /var/www/html/biblioteca/.env
-          $envs
-          EOF
+          script: |
+            echo "Criando arquivo .env remoto..."
+            # Aqui usamos cat <<EOF (sem aspas) para expandir a variável
+            cat <<EOF > /var/www/html/biblioteca/.env
+      $envs
+      EOF
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
