@@ -2,17 +2,15 @@ name: Laravel CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, develop]
   pull_request:
-    branches:
-      - main
+    branches: [main, develop]
 
 jobs:
   deploy:
     name: Deploy to Server via SSH
     runs-on: ubuntu-22.04
-    environment: production
+    environment: ${{ github.ref_name == 'develop' && 'staging' || 'production' }}
 
     steps:
       - name: Checkout code
@@ -36,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  base_path=${{ vars.DEPLOY_FOLDER }}
+                  base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
                   config_folder=${{ vars.ENV_FOLDER }}
                   echo "${base_path}/${config_folder}/.env.production"
@@ -55,7 +53,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  base_path=${{ vars.DEPLOY_FOLDER }}
+                  base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
                   echo "$base_path/$folder"
                   cd "$base_path/$folder"
