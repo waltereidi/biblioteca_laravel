@@ -39,7 +39,7 @@ jobs:
           folder: ${{ vars.DEPLOY_FOLDER }}
           config_folder: ${{ vars.CONFIG_FOLDER }}
           script: |
-            cp $config_path/$config_folder/.env.production $base_path/$folder/.env
+            cp $config_path/$config_folder/.env.develop $base_path/$folder/.env
 
 
       - name: Run remote commands
