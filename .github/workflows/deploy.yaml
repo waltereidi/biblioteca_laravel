@@ -30,33 +30,35 @@ jobs:
 
       - name: Upload .env from variable
         uses: appleboy/ssh-action@v1.2.1
+        env:
+          BASE_PATH: /var/www/html
+          FOLDER: biblioteca
+          CONFIG_FOLDER: biblioteca.config
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          base_path: ${{ vars.DEPLOY_BASE_PATH }}
-          folder: ${{ vars.DEPLOY_FOLDER }}
-          config_folder: ${{ vars.ENV_FOLDER }}
           script: |
-            cp "${base_path}/${config_folder}/.env.production" "${base_path}/${folder}/.env"
+            cp "${BASE_PATH}/${CONFIG_FOLDER}/.env.develop" "${BASE_PATH}/${FOLDER}/.env"
 
 
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
+        env:
+            BASE_PATH: /var/www/html
+            FOLDER: biblioteca
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          base_path: ${{ vars.DEPLOY_BASE_PATH }}
-          folder: ${{ vars.DEPLOY_FOLDER }}
           script: |
-            cd "${base_path}/${folder}"
+            cd "${BASE_PATH}/${FOLDER}"
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            nohup php artisan serve --port 8000 > /dev/null 2>&1 & disown
+            nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
             sudo systemctl restart nginx
