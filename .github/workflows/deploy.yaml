@@ -40,9 +40,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  base_path="/var/www/html"
-                  folder="biblioteca"
-                  config_folder="biblioteca.config"
+                  base_path=$BASE_PATH
+                  folder=$FOLDER
+                  config_folder=$CONFIG_FOLDER
 
                   cp "${base_path}/${config_folder}/.env.production" "${base_path}/${folder}/.env"
 
@@ -58,11 +58,15 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd "${BASE_PATH}/${FOLDER}"
-            composer install --no-interaction --prefer-dist --optimize-autoloader
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
-            sudo systemctl restart nginx
+                  base_path=$BASE_PATH
+                  folder=$FOLDER
+
+                  cd "$base_path/$folder"
+
+                  composer install --no-interaction --prefer-dist --optimize-autoloader
+                  php artisan migrate --force
+                  php artisan config:cache
+                  php artisan route:cache
+                  php artisan view:cache
+                  nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
+                  sudo systemctl restart nginx
