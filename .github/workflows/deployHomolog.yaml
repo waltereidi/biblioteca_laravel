@@ -39,7 +39,7 @@ jobs:
           folder: ${{ vars.DEPLOY_FOLDER }}
           config_folder: ${{ vars.ENV_FOLDER }}
           script: |
-            cp "$base_path/$config_folder/.env.develop" "$base_path/$folder/.env"
+            cp "${base_path}/${config_folder}/.env.develop" "${base_path}/${folder}/.env"
 
 
       - name: Run remote commands
@@ -52,7 +52,7 @@ jobs:
           base_path: ${{ vars.DEPLOY_BASE_PATH }}
           folder: ${{ vars.DEPLOY_FOLDER }}
           script: |
-            cd "$base_path/$folder"
+            cd "${base_path}/${folder}"
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
