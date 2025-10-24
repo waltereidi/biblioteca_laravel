@@ -37,7 +37,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           base_path: ${{ vars.DEPLOY_BASE_PATH }}
           folder: ${{ vars.DEPLOY_FOLDER }}
-          config_folder: ${{ vars.CONFIG_FOLDER }}
+          config_folder: ${{ vars.ENV_FOLDER }}
           script: |
             cp "$config_path/$config_folder/.env.develop" "$base_path/$folder/.env"
 
