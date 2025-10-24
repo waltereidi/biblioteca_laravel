@@ -30,19 +30,15 @@ jobs:
 
       - name: Upload .env from variable
         uses: appleboy/ssh-action@v1.2.1
-        env:
-          BASE_PATH: /var/www/html
-          FOLDER: biblioteca
-          CONFIG_FOLDER: biblioteca.config
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  base_path=$BASE_PATH
-                  folder=$FOLDER
-                  config_folder=$CONFIG_FOLDER
+                  base_path=${{ vars.DEPLOY_FOLDER }}
+                  folder=${{ vars.DEPLOY_FOLDER }}
+                  config_folder=${{ vars.ENV_FOLDER }}
                   echo "${base_path}/${config_folder}/.env.production"
                   echo "${base_path}/${folder}/.env"
                   cp "${base_path}/${config_folder}/.env.production" "${base_path}/${folder}/.env"
@@ -59,9 +55,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  base_path=$BASE_PATH
-                  folder=$FOLDER
-
+                  base_path=${{ vars.DEPLOY_FOLDER }}
+                  folder=${{ vars.DEPLOY_FOLDER }}
+                  echo "$base_path/$folder"
                   cd "$base_path/$folder"
 
                   composer install --no-interaction --prefer-dist --optimize-autoloader
