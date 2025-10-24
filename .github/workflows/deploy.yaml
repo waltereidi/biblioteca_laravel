@@ -40,7 +40,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cp "${BASE_PATH}/${CONFIG_FOLDER}/.env.develop" "${BASE_PATH}/${FOLDER}/.env"
+                  base_path="/var/www/html"
+                  folder="biblioteca"
+                  config_folder="biblioteca.config"
+
+                  cp "${base_path}/${config_folder}/.env.production" "${base_path}/${folder}/.env"
 
 
       - name: Run remote commands
