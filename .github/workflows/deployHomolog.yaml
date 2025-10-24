@@ -3,10 +3,10 @@ name: Laravel CI/CD
 on:
   push:
     branches:
-      - main
+      - develop
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   deploy:
@@ -58,5 +58,5 @@ jobs:
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            nohup php artisan serve --port 8000 > /dev/null 2>&1 & disown
+            nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
             sudo systemctl restart nginx
