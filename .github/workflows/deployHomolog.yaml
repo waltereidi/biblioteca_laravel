@@ -12,7 +12,7 @@ jobs:
   deploy:
     name: Deploy to Server via SSH
     runs-on: ubuntu-22.04
-    environment: production
+    environment: development
 
     steps:
       - name: Checkout code
