@@ -79,4 +79,3 @@ jobs:
             cd "$base_path/$folder"
 
             mv ./$folder/* .
-            rm -rf ./$folder
