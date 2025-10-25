@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          source: "${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}/."
+          source: "./biblioteca/."
           target: "${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}"
 
       - name: Upload .env from variable
