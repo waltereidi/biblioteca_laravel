@@ -65,7 +65,6 @@ jobs:
                   nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
                   sudo systemctl restart nginx
 
-      - if: github.ref_name == 'develop'
         name: Rename remote folder
         uses: appleboy/ssh-action@v1.2.1
         with:
@@ -79,5 +78,5 @@ jobs:
             echo "$base_path/$folder"
             cd "$base_path/$folder"
 
-            mv ./biblioteca/* .
-            rm -rf ./biblioteca
+            mv ./$folder/* .
+            rm -rf ./$folder
