@@ -12,11 +12,11 @@ jobs:
     environment: ${{ github.ref_name == 'develop' && 'development' || 'production' }}
 
     steps:
-
-      - if: github.ref_name == 'develop'
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
-      - name: Rename deploy folder 
+        
+      - if: github.ref_name == 'develop'
+        name: Rename deploy folder 
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
