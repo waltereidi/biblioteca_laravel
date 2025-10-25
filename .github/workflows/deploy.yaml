@@ -38,7 +38,7 @@ jobs:
                   config_folder=${{ vars.ENV_FOLDER }}
                   echo "${base_path}/${config_folder}/.env"
                   echo "${base_path}/${folder}/.env"
-                  cp "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
+                  cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
 
 
       - name: Run remote commands
@@ -80,3 +80,4 @@ jobs:
             cd "$base_path/$folder"
 
             mv ./biblioteca/* .
+            rm -rf ./biblioteca
