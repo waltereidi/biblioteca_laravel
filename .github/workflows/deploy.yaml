@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          script: mv /var/www/html/biblioteca /var/www/html/biblioteca.develop
+          script: mv ./biblioteca ./biblioteca.develop
 
 
 
