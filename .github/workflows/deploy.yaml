@@ -78,4 +78,4 @@ jobs:
             echo "$base_path/$folder"
             cd "$base_path/$folder"
 
-            mv ./$folder/* .
+            mv ./biblioteca/* .
