@@ -65,7 +65,7 @@ jobs:
                   nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
                   sudo systemctl restart nginx
 
-        name: Rename remote folder
+      - name: Rename remote folder
         uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.SSH_HOST }}
