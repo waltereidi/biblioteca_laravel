@@ -24,7 +24,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            mv biblioteca ${{ vars.DEPLOY_FOLDER }}
+            ls
+            mv ./biblioteca ./${{ vars.DEPLOY_FOLDER }}
 
 
 
