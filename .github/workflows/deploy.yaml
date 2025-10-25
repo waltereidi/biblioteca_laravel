@@ -9,7 +9,7 @@ jobs:
   deploy:
     name: Deploy to Server via SSH
     runs-on: ubuntu-22.04
-    environment: ${{ github.ref_name == 'develop' && 'staging' || 'production' }}
+    environment: ${{ github.ref_name == 'develop' && 'development' || 'production' }}
 
     steps:
       - name: Checkout code
