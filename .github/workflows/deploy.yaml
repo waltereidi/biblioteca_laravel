@@ -15,19 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - if: github.ref_name == 'develop'
-        name: Rename remote folder
-        uses: appleboy/ssh-action@v1.2.1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.EC2_SSH_PEM }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            mv /var/www/html/biblioteca /var/www/html/biblioteca.develop
-
-
-
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -35,7 +22,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          source: "./${{ vars.DEPLOY_FOLDER }}/*"
+          source: "./biblioteca/."
           target: "${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}"
 
       - name: Upload .env from variable
@@ -52,8 +39,6 @@ jobs:
                   echo "${base_path}/${config_folder}/.env"
                   echo "${base_path}/${folder}/.env"
                   cp "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
-
-
       - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
         env:
@@ -69,7 +54,6 @@ jobs:
                   folder=${{ vars.DEPLOY_FOLDER }}
                   echo "$base_path/$folder"
                   cd "$base_path/$folder"
-
                   composer install --no-interaction --prefer-dist --optimize-autoloader
                   php artisan migrate --force
                   php artisan config:cache
