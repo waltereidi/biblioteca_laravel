@@ -74,20 +74,22 @@ jobs:
                   php artisan config:cache
                   php artisan route:cache
                   php artisan view:cache
-                  nohup php artisan serve --port 8080 > /dev/null 2>&1 & disown
                   sudo systemctl restart nginx
 
-      - name: Rename remote folder
+      - name: Start server 
         uses: appleboy/ssh-action@v1.2.1
+        env:
+            BASE_PATH: /var/www/html
+            FOLDER: biblioteca
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
+          app_port: ${{ vars.APP_PORT }}
           script: |
-            base_path=${{ vars.DEPLOY_BASE_PATH }}
-            folder=${{ vars.DEPLOY_FOLDER }}
-            echo "$base_path/$folder"
-            cd "$base_path/$folder"
-
-            mv ./biblioteca/* .
+                  base_path=${{ vars.DEPLOY_BASE_PATH }}
+                  folder=${{ vars.DEPLOY_FOLDER }}
+                  echo "$base_path/$folder"
+                  cd "$base_path/$folder"
+                  nohup php artisan serve --host=0.0.0.0 --port=${{ vars.APP_PORT }}
