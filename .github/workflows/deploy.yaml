@@ -15,16 +15,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: backup files
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USER }}
-      #     key: ${{ secrets.EC2_SSH_PEM }}
-      #     port: ${{ secrets.SSH_PORT }}
-      #     script: |
-            
-
+      - name: backup files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PEM }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rm -f ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp2.zip 2>/dev/null || true
+            mv -f ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp.zip ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp2.zip 2>/dev/null || true
+            zip -r -q ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp.zip ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}
 
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
@@ -33,7 +34,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          source: "./biblioteca/."
+          source: "./biblioteca/*"
           target: "${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}"
 
       - name: Upload .env from variable
