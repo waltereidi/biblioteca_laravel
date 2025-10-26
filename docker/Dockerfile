@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instala dependências do sistema e extensões PHP necessárias
+# Instala dependências e extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     git \
@@ -8,16 +8,29 @@ RUN apt-get update && apt-get install -y \
     curl \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Instala Node.js e npm (versão LTS atual)
+# Instala Node.js (versão LTS 20.x)
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest
 
+# Instala e configura o Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.log=/tmp/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 # Instala o Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Define o diretório de trabalho
+# Define diretório de trabalho
 WORKDIR /var/www/html/biblioteca
+
+# Copia arquivos do projeto (opcional — melhor usar volume)
+# COPY . .
 
 # Ajusta permissões
 RUN chown -R www-data:www-data /var/www/html/biblioteca
@@ -25,6 +38,9 @@ RUN chown -R www-data:www-data /var/www/html/biblioteca
 # Copia e torna executável o script de inicialização
 COPY docker-script.sh /usr/local/bin/docker-script.sh
 RUN chmod +x /usr/local/bin/docker-script.sh
+
+# Copia php-config customizado
+COPY ./php/php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 
 ENTRYPOINT ["/usr/local/bin/docker-script.sh"]
 CMD ["php-fpm"]
