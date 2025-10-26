@@ -25,7 +25,7 @@ jobs:
           script: |
             rm -f ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp2.zip 2>/dev/null || true
             mv -f ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp.zip ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp2.zip 2>/dev/null || true
-            zip -r -q ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp.zip ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}
+            zip -r -q ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }}_bkp.zip ${{ vars.DEPLOY_BASE_PATH }}/${{ vars.DEPLOY_FOLDER }} || true
 
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
