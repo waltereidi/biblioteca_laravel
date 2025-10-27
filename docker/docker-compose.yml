@@ -9,13 +9,18 @@ services:
     container_name: laravel_app
     ports:
       - "8000:8000"
+      - "9005:9005"
     volumes:
-      - pgdata:/var/lib/postgresql/data
       - ../biblioteca:/var/www/html/biblioteca
+    environment:
+      - XDEBUG_MODE=debug
+      - XDEBUG_START_WITH_REQUEST=yes
     depends_on:
       - db
     networks:
       - laravel
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   # Serviço do banco PostgreSQL
   db:
