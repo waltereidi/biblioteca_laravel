@@ -53,7 +53,8 @@ jobs:
                   cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
 
 
-      - name: Run remote commands
+      - if: github.ref_name == 'main'
+        name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
         env:
             BASE_PATH: /var/www/html
@@ -71,12 +72,17 @@ jobs:
 
                   composer install --no-interaction --prefer-dist --optimize-autoloader
                   php artisan migrate --force
+                  php artisan config:clear
+                  php artisan route:clear
+                  php artisan view:clear
+                  php artisan cache:clear
                   php artisan config:cache
                   php artisan route:cache
                   php artisan view:cache
                   sudo systemctl restart nginx
 
-      - name: Start server 
+      - if: github.ref_name == 'develop'
+        name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
         env:
             BASE_PATH: /var/www/html
@@ -86,10 +92,19 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_SSH_PEM }}
           port: ${{ secrets.SSH_PORT }}
-          app_port: ${{ vars.APP_PORT }}
           script: |
                   base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
-                  echo "$base_path/$folder"
-                  cd "$base_path/$folder"
-                  php artisan serve --host=0.0.0.0 --port=${{ vars.APP_PORT }}
+                  echo "$base_path/biblioteca/$folder"
+                  cd "$base_path/biblioteca/$folder"
+
+                  composer install --no-interaction --prefer-dist --optimize-autoloader
+                  php artisan migrate --force
+                  php artisan config:clear
+                  php artisan route:clear
+                  php artisan view:clear
+                  php artisan cache:clear
+                  php artisan config:cache
+                  php artisan route:cache
+                  php artisan view:cache
+                  sudo systemctl restart nginx
