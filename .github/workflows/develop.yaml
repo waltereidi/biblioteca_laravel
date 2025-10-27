@@ -2,14 +2,14 @@ name: Laravel CI/CD
 
 on:
   push:
-    branches: [main, develop]
+    branches: [develop]
 
 
 jobs:
   deploy:
     name: Deploy to Server via SSH
     runs-on: ubuntu-22.04
-    environment: ${{ github.ref_name == 'develop' && 'development' || 'production' }}
+    environment: development
 
     steps:
       - name: Checkout code
@@ -50,39 +50,10 @@ jobs:
                   config_folder=${{ vars.ENV_FOLDER }}
                   echo "${base_path}/${config_folder}/.env"
                   echo "${base_path}/${folder}/.env"
-                  cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
+                  cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/biblioteca/.env"
 
 
-      - if: github.ref_name == 'main'
-        name: Run remote commands
-        uses: appleboy/ssh-action@v1.2.1
-        env:
-            BASE_PATH: /var/www/html
-            FOLDER: biblioteca
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.EC2_SSH_PEM }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-                  base_path=${{ vars.DEPLOY_BASE_PATH }}
-                  folder=${{ vars.DEPLOY_FOLDER }}
-                  echo "$base_path/$folder"
-                  cd "$base_path/$folder"
-
-                  composer install --no-interaction --prefer-dist --optimize-autoloader
-                  php artisan migrate --force
-                  php artisan config:clear
-                  php artisan route:clear
-                  php artisan view:clear
-                  php artisan cache:clear
-                  php artisan config:cache
-                  php artisan route:cache
-                  php artisan view:cache
-                  sudo systemctl restart nginx
-
-      - if: github.ref_name == 'develop'
-        name: Run remote commands
+      - name: Run remote commands
         uses: appleboy/ssh-action@v1.2.1
         env:
             BASE_PATH: /var/www/html
