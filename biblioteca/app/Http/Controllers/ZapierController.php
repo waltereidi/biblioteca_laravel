@@ -15,17 +15,17 @@ class ZapierController extends Controller
     {
         $data = $request->all();
 
-        $file = $request->file('file');
-        // Armazena em storage/app/uploads (usando o driver configurado)
-        $path = $file->store('GoogleDriveBooks');
-
-
         ZapierIntegration::create([
             'NomeIntegracao' => 'ZapierGoogleDriveAPI',
             'Evento' => $request->input('event', 'unknown'),
             'Payload' => ['teste'],
             'Ativo' => true,
         ]);
+
+        $file = $request->file('file');
+        // Armazena em storage/app/uploads (usando o driver configurado)
+        $path = $file->store('GoogleDriveBooks');
+
 
         return response()->json([
             'success' => true,
