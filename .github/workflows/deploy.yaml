@@ -92,4 +92,4 @@ jobs:
                   folder=${{ vars.DEPLOY_FOLDER }}
                   echo "$base_path/$folder"
                   cd "$base_path/$folder"
-                  nohup php artisan serve --host=0.0.0.0 --port=${{ vars.APP_PORT }} disown
+                  php artisan serve --host=0.0.0.0 --port=${{ vars.APP_PORT }}
