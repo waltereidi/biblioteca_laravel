@@ -95,8 +95,8 @@ jobs:
           script: |
                   base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
-                  echo "$base_path/biblioteca/$folder"
-                  cd "$base_path/biblioteca/$folder"
+                  echo "$base_path/$folder/biblioteca"
+                  cd "$base_path/$folder/biblioteca"
 
                   composer install --no-interaction --prefer-dist --optimize-autoloader
                   php artisan migrate --force
