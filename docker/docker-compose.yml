@@ -9,6 +9,7 @@ services:
     container_name: laravel_app
     ports:
       - "8000:8000"
+      - "9005:9005"
     volumes:
       - ../biblioteca:/var/www/html/biblioteca
     environment:
@@ -32,7 +33,6 @@ services:
       POSTGRES_DB: laravel
     ports:
       - "5432:5432"
-      - "9003:9003"
     networks:
       - laravel
     volumes:

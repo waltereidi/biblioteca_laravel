@@ -9,7 +9,7 @@
       "pathMappings": {
         "/var/www/html/biblioteca": "${workspaceFolder}/biblioteca"
       },
-      "log": false
+      "log": true
     }
   ]
 }
