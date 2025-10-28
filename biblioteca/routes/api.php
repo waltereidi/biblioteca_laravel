@@ -9,4 +9,4 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 
-Route::post('zapier/googleDriveFileUpload', [ZapierController::class, 'googleDriveFileUpload']);
+Route::post('zapier/googleDriveFileUpload', [ZapierController::class, 'googleDriveFileUpload'])->middleware('bearer.auth');
