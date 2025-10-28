@@ -47,9 +47,9 @@ jobs:
                   base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
                   config_folder=${{ vars.ENV_FOLDER }}
-                  echo "${base_path}/${config_folder}/.env"
-                  echo "${base_path}/${folder}/.env"
-                  cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/.env"
+                  echo "${base_path}/${config_folder}/biblioteca/.env"
+                  echo "${base_path}/${folder}/biblioteca/.env"
+                  cp -r "${base_path}/${config_folder}/.env" "${base_path}/${folder}/biblioteca/.env"
 
 
       - if: github.ref_name == 'main'
@@ -66,8 +66,8 @@ jobs:
           script: |
                   base_path=${{ vars.DEPLOY_BASE_PATH }}
                   folder=${{ vars.DEPLOY_FOLDER }}
-                  echo "$base_path/$folder"
-                  cd "$base_path/$folder"
+                  echo "$base_path/$folder/biblioteca"
+                  cd "$base_path/$folder/biblioteca"
 
                   composer install --no-interaction --prefer-dist --optimize-autoloader
                   php artisan migrate --force
