@@ -17,22 +17,30 @@ class ZapierController extends Controller
         // Captura todos os dados da requisição
         $data = $request->except('file'); // remove o campo File
 
-        // Registra a integração com o payload completo (sem o arquivo)
-        ZapierIntegration::create([
-            'NomeIntegracao' => 'ZapierGoogleDriveAPI',
-            'Evento' => $request->input('event', 'unknown'),
-            'Payload' => $data,
-            'Ativo' => true,
-            'DataRecebimento' => now(),
-        ]);
+        $entity = new ZapierIntegration();
+        $entity->NomeIntegracao = 'ZapierGoogleDriveAPI';
+        $entity->Evento = $request->input('event', 'unknown');
+        $entity->Payload = $data;
+        $entity->Ativo = true;
+        $entity->DataRecebimento = now();
+        $entity->FileLocation = $filePath ?? null;
+        $entity->Log = '1-Recebido requisição de : '.$request->ip();
 
+        // // Registra a integração com o payload completo (sem o arquivo)
         // Armazena o arquivo no diretório GoogleDriveBooks
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $path = $file->store('GoogleDriveBooks');
-        }else{
-             Storage::disk('public')->put('teste.txt', 'Arquivo salvo com sucesso!');
+            // Salva dentro de /var/www/html/storage/livros/
+            $path = $file->storeAs('livros', $file->getClientOriginalName(), 'public');
+            $file = Storage::disk('public')->path($path);
+            $entity->FileLocation = $file;    
+            $entity->Log .= ' | 2-Arquivo salvo em: '.$file;
+
+        } else {
+            $entity->Log .= ' | 2-Erro ao salvar arquivo. ';
         }
+        
+        $entity->save();
 
         return response()->json([
             'success' => true,

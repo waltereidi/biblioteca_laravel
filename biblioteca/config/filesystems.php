@@ -37,11 +37,10 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
         'public' => [
             'driver' => 'local',
             'root' => env('FILESYSTEM_PUBLIC_ROOT', storage_path('app/public')),
-            'url' => env('FILESYSTEM_PUBLIC_URL', env('APP_URL') . '/storage'),
+            'url' => env('FILESYSTEM_PUBLIC_URL', env('APP_URL').'/storage'),
             'visibility' => 'public',
         ],
 

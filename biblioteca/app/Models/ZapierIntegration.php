@@ -18,6 +18,8 @@ class ZapierIntegration extends Model
             'Payload',
             'Ativo',
             'DataRecebimento',
+            'FileLocation',
+            'Log'
         ];
 
         protected $casts = [
