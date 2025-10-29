@@ -23,7 +23,7 @@ class BearerAuthMiddleware
 
         // Compara com o token esperado do .env
         if ($authorizationHeader !== $expectedToken) {
-            return response()->json(['error' => 'Token inválido'], 403);
+            return response()->json(['error' => 'Token inválido'.$authorizationHeader.'  '.$expectedToken], 403);
         }
 
         return $next($request);
