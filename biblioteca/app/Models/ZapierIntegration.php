@@ -27,4 +27,9 @@ class ZapierIntegration extends Model
             'Ativo' => 'boolean',
             'DataRecebimento' => 'datetime',
         ];
+        public function appendLog($message)
+        {
+            $this->Log .= ($this->Log ? ' | ' : '') . $message;
+            $this->save();
+        }
 }

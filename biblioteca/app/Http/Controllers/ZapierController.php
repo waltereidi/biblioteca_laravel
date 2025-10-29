@@ -24,7 +24,7 @@ class ZapierController extends Controller
         $entity->Ativo = true;
         $entity->DataRecebimento = now();
         $entity->FileLocation = $filePath ?? null;
-        $entity->Log = '1-Recebido requisição de : '.$request->ip();
+        $entity->appendLog('1-Recebido requisição de : '.$request->ip());
 
         // // Registra a integração com o payload completo (sem o arquivo)
         // Armazena o arquivo no diretório GoogleDriveBooks
@@ -34,14 +34,12 @@ class ZapierController extends Controller
             $path = $file->storeAs('livros', $file->getClientOriginalName(), 'public');
             $file = Storage::disk('public')->path($path);
             $entity->FileLocation = $file;    
-            $entity->Log .= ' | 2-Arquivo salvo em: '.$file;
+            $entity->appendLog('2-Arquivo salvo em: '.$file);
 
         } else {
-            $entity->Log .= ' | 2-Erro ao salvar arquivo. ';
+            $entity->appendLog(' | 2-Erro ao salvar arquivo. ');
         }
         
-        $entity->save();
-
         return response()->json([
             'success' => true,
             'message' => 'Integração registrada com sucesso',
