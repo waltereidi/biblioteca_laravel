@@ -15,6 +15,9 @@ class BearerAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(env('ZAPIER_WEBHOOK_SECRET') == '')
+            return response()->json(['error' => 'Erro de configuração não esperado'], 403);
+
         $authorizationHeader = $request->header('Authorization');
         $expectedToken = 'Bearer '.env('ZAPIER_WEBHOOK_SECRET');
 
@@ -23,7 +26,7 @@ class BearerAuthMiddleware
 
         // Compara com o token esperado do .env
         if ($authorizationHeader !== $expectedToken) {
-            return response()->json(['error' => 'Token inválido'.$authorizationHeader.'  '.$expectedToken], 403);
+            return response()->json(['error' => 'Token inválido'], 403);
         }
 
         return $next($request);
