@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Requests\CreateUserCommentRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Log;
 class Book extends Model
 {
  use HasFactory;
@@ -30,4 +31,5 @@ class Book extends Model
         'available'    => 'boolean',
         'pages'        => 'integer',
     ];
+
 }

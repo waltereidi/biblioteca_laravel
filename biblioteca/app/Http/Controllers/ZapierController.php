@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ZapierIntegrationRequest;
 use App\Models\ZapierIntegration;
+use App\Service\ZapierService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -12,37 +14,16 @@ class ZapierController extends Controller
     /**
      * Recebe uma requisição POST enviada pelo Zapier.
      */
-    public function googleDriveFileUpload(Request $request)
+    public function googleDriveFileUpload(ZapierIntegrationRequest $request)
     {
         // Remove o campo 'file' do payload
-        $data = $request->except('file'); 
-
-        // Cria a entidade base
-        $entity = new ZapierIntegration();
-        $entity->NomeIntegracao = 'ZapierGoogleDriveAPI';
-        $entity->Evento = $request->input('event', 'unknown');
-        $entity->Payload = $data;
-        $entity->Ativo = true;
-        $entity->DataRecebimento = now();
+        $entity = ZapierIntegration::createFromRequest($request); 
         $entity->appendLog('1-Recebido requisição de : '.$request->ip());
 
         // Captura o primeiro arquivo enviado (independente do nome do campo)
-        $uploadedFiles = $request->allFiles();
-        $firstFile = reset($uploadedFiles); // pega o primeiro arquivo
 
-        if ($firstFile) {
-            // Nome do arquivo definido no JSON (campo 'originalFilename')
-            $originalName = $request->input('originalFilename', $firstFile->getClientOriginalName());
-
-            // Salva o arquivo com o nome original dentro de storage/livros/
-            $path = $firstFile->storeAs('livros', $originalName, 'public');
-
-            $fullPath = Storage::disk('public')->path($path);
-            $entity->FileLocation = $fullPath;
-            $entity->appendLog('2-Arquivo salvo em: '.$fullPath);
-        } else {
-            $entity->appendLog(' | 2-Erro ao salvar arquivo: nenhum arquivo encontrado.');
-        }
+        $service = new ZapierService();
+        $service->processGoogleDriveUpload($request->allFiles(), $entity);
 
         // Salva a entidade no banco
         $entity->save();
