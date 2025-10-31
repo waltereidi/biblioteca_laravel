@@ -27,7 +27,7 @@ class ZapierService
         }
 
         // Extrai a primeira URL encontrada no conteúdo
-        preg_match('/https?:\/\/[^\s]+/i', $content, $matches);
+        preg_match('/https?:\/\/[^\s]+?(?=\d{4}-\d{2}-\d{2}T|\s|image\/|$)/i', $content, $matches);
 
         if (!isset($matches[0])) {
             $entity->appendLog(' | 2-Erro ao salvar arquivo: nenhum link encontrado no arquivo.');
