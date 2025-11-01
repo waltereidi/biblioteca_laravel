@@ -16,17 +16,10 @@ class ZapierController extends Controller
      */
     public function googleDriveFileUpload(ZapierIntegrationRequest $request)
     {
-        // Remove o campo 'file' do payload
-        $entity = ZapierIntegration::createFromRequest($request); 
-        $entity->appendLog('1-Recebido requisição de : '.$request->ip());
-
-        // Captura o primeiro arquivo enviado (independente do nome do campo)
 
         $service = new ZapierService();
-        $service->processGoogleDriveUpload($request->allFiles(), $entity);
+        $service->processGoogleDriveUpload($request->allFiles(), $request );
 
-        // Salva a entidade no banco
-        $entity->save();
 
         return response()->json([
             'success' => true,

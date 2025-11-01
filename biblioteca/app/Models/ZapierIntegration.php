@@ -34,15 +34,15 @@ class ZapierIntegration extends Model
             $this->Log .= ($this->Log ? ' | ' : '') . $message;
             $this->save();
         }
-        public static function createFromRequest(ZapierIntegrationRequest $request)
-        {
-            $e = new ZapierIntegration();
-            $e->NomeIntegracao = 'ZapierGoogleDriveAPI';
-            $e->Evento = $request->input('event', 'unknown');
-            $e->Payload = $request->__tostring();
-            $e->Ativo = true;
-            $e->DataRecebimento =$request->createdDate ?? now();
+        // public static function createFromRequest(ZapierIntegrationRequest $request)
+        // {
+        //     $e = new ZapierIntegration();
+        //     $e->NomeIntegracao = 'ZapierGoogleDriveAPI';
+        //     $e->Evento = $request->input('event', 'unknown');
+        //     $e->Payload = $request->__tostring();
+        //     $e->Ativo = true;
+        //     $e->DataRecebimento =$request->createdDate ?? now();
 
-            return $e;
-        }
+        //     return $e;
+        // }
 }
