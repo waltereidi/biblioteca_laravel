@@ -10,9 +10,9 @@ class Book extends Model
 {
  use HasFactory;
 
-    // Por padrão o Laravel já usará a tabela 'books'.
+    // Por padrão o Laravel já usará a tabela 'book'.
     // Se quiser forçar um nome diferente (ex.: 'Books' com B maiúsculo), descomente:
-    // protected $table = 'Books';
+    protected $table = 'book';
 
     protected $primaryKey = 'id';
     public $timestamps = true;

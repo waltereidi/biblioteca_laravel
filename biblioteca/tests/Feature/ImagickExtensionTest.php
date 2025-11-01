@@ -29,7 +29,7 @@ class ImagickExtensionTest extends TestCase
         // Caminho de saída (Laravel Storage temporário)
         $outputDir = storage_path('tests/Files');
         File::ensureDirectoryExists($outputDir);
-
+        
         $thumbnailPath = $outputDir . '/sample_cover_thumbnail.jpg';
 
         try {
@@ -62,7 +62,7 @@ class ImagickExtensionTest extends TestCase
                 'thumbnails/sample_cover_thumbnail.jpg',
                 file_get_contents($thumbnailPath)
             );
-            
+
             $this->assertTrue(Storage::disk('public')->exists('thumbnails/sample_cover_thumbnail.jpg'));
 
         } catch (\ImagickException $e) {

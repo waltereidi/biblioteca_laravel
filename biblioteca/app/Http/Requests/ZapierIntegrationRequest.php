@@ -28,7 +28,7 @@ class ZapierIntegrationRequest extends FormRequest
     public function createBookFromRequest(): Book
     {
         $book = new Book();
-        $book->title = $this->input('title', );
+        $book->title = $this->input('title','unkown' );
         $book->author = $this->input('author', 'Unknown');
         $book->isbn = $this->input('isbn', '0000000000');
         $book->pages = $this->input('pages', 0);

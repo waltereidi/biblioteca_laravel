@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->string('author', 150);
-            $table->string('isbn', 20)->unique()->nullable();
+            $table->string('isbn', 20)->nullable();
             $table->integer('pages')->default(0);
             $table->date('published_at')->nullable();
             $table->boolean('available')->default(true);

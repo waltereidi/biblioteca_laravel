@@ -21,8 +21,8 @@ class CreateUserCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => 'required|integer|exists:books,id',
-            'user_id' => 'required|integer|exists:users,id',
+            'book_id' => 'required|integer|exists:book,id',
+            'user_id' => 'required|integer|exists:user,id',
             'comment' => 'required|string|max:1000',
         ];
     }

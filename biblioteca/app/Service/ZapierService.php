@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Http\Requests\ZapierIntegrationRequest;
-use App\Jobs\GetThumbnailFromPDF;
+use App\Jobs\MakeBookThumbnailFromPDF;
 use App\Models\StorageBook;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +25,7 @@ class ZapierService
                 'storage_path' => $savedFilePath,
             ]);
 
-            GetThumbnailFromPDF::dispatch($savedFilePath);
+            MakeBookThumbnailFromPDF::dispatch($savedFilePath , $book->id);
 
         }catch(\Exception $e){
             $entity->appendLog(' | Erro ao processar upload do Google Drive: '.$e->getMessage());
@@ -79,8 +79,8 @@ class ZapierService
         }
 
         // Salva no storage público
-        $path = 'downloads/' . uniqid(pathinfo($filename, PATHINFO_FILENAME) . '_') . '.' . $extension;
-        Storage::disk('public')->put($path, $response->body());
+        $path = '/downloads/' . uniqid(pathinfo($filename, PATHINFO_FILENAME) . '_') . '.' . $extension;
+        $fileSaved = Storage::disk('public')->put($path, $response->body());
 
         // $publicUrl = Storage::url($path);
         
