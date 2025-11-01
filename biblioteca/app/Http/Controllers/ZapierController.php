@@ -16,10 +16,8 @@ class ZapierController extends Controller
      */
     public function googleDriveFileUpload(ZapierIntegrationRequest $request)
     {
-
         $service = new ZapierService();
         $service->processGoogleDriveUpload($request->allFiles(), $request );
-
 
         return response()->json([
             'success' => true,

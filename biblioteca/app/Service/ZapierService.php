@@ -3,9 +3,8 @@
 namespace App\Service;
 
 use App\Http\Requests\ZapierIntegrationRequest;
-use App\Models\Book;
+use App\Jobs\GetThumbnailFromPDF;
 use App\Models\StorageBook;
-use App\Models\ZapierIntegration;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,11 +24,12 @@ class ZapierService
                 'book_id' => $book->id,
                 'storage_path' => $savedFilePath,
             ]);
-            
+
+            GetThumbnailFromPDF::dispatch($savedFilePath);
 
         }catch(\Exception $e){
             $entity->appendLog(' | Erro ao processar upload do Google Drive: '.$e->getMessage());
-            return response()->json(['error' => 'Erro ao processar upload do Google Drive.'], 500);
+            throw $e;
         }
 
     }
@@ -84,7 +84,7 @@ class ZapierService
 
         // $publicUrl = Storage::url($path);
         
-        return $path;
+        return env('FILESYSTEM_PUBLIC_ROOT').$path;
         // $entity->FileLocation = $path;
         // $entity->appendLog(' | 2-Arquivo salvo com sucesso em: ' . $path.'  '.$publicUrl);
     }
