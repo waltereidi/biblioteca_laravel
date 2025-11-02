@@ -25,7 +25,8 @@ class ZapierService
                 'storage_path' => $savedFilePath,
             ]);
 
-            MakeBookThumbnailFromPDF::dispatch($savedFilePath , $book->id);
+            if(env('WORK_DISPATCH')??'true' == 'true')
+                MakeBookThumbnailFromPDF::dispatchSync($savedFilePath , $book->id);
 
         }catch(\Exception $e){
             $entity->appendLog(' | Erro ao processar upload do Google Drive: '.$e->getMessage());
@@ -79,12 +80,12 @@ class ZapierService
         }
 
         // Salva no storage público
-        $path = '/downloads/' . uniqid(pathinfo($filename, PATHINFO_FILENAME) . '_') . '.' . $extension;
-        $fileSaved = Storage::disk('public')->put($path, $response->body());
+        $path = 'downloads/' . uniqid(pathinfo($filename, PATHINFO_FILENAME) . '_') . '.' . $extension;
+        Storage::disk('public')->put($path, $response->body());
 
         // $publicUrl = Storage::url($path);
         
-        return env('FILESYSTEM_PUBLIC_ROOT').$path;
+        return env('FILESYSTEM_PUBLIC_ROOT').'/'.$path;
         // $entity->FileLocation = $path;
         // $entity->appendLog(' | 2-Arquivo salvo com sucesso em: ' . $path.'  '.$publicUrl);
     }

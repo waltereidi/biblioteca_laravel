@@ -24,7 +24,7 @@ class MakeBookThumbnailFromPDF implements ShouldQueue
     public function __construct(string $sourcePath, int $book_id)
     {
         $this->sourcePath = $sourcePath;
-        $this->targetPath = $targetPath ?? env('FILESYSTEM_TEMP') ?? throw new Exception("Unset temporary folder in .env"); // sobrescreve se não passar
+        $this->targetPath = $targetPath ?? env('FILESYSTEM_TEMP').'/' ?? throw new Exception("Unset temporary folder in .env"); // sobrescreve se não passar
         $this->book_id = $book_id ?? throw new Exception("Book ID is required");
     }
     /**
@@ -41,14 +41,14 @@ class MakeBookThumbnailFromPDF implements ShouldQueue
         try{
             $saveThumnailPath = $this->targetPath . '/sample_cover_thumbnail.jpg';
 
-            $imagick = new Imagick();
+            $imagick = new \Imagick();
             $imagick->setResolution(150, 150);
 
 
             $imagick->readImage("{$this->sourcePath}[0]");
             $imagick->setImageFormat('jpeg');
             $imagick->setImageBackgroundColor('white');
-            $imagick = $imagick->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+            $imagick = $imagick->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
 
             // 4️⃣ Redimensiona mantendo proporção
             $imagick->thumbnailImage(300, 300, true);
