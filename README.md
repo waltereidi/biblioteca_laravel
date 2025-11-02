@@ -22,3 +22,9 @@ O endpoint retorna um objeto JSON no seguinte formato:
     }
   ]
 }
+<img width="1824" height="1362" alt="Diagrama de sequência básico" src="https://github.com/user-attachments/assets/cb45e117-e17a-4df9-8278-c64e79137fbc" />
+<br/>
+Exemplo de thumbnail gerado: 
+
+<img width="549" height="56" alt="image" src="https://github.com/user-attachments/assets/470da860-3e0a-4c0e-bafa-e90f3e56901b" />
+![sample_cover_thumbnail](https://github.com/user-attachments/assets/b7391364-1479-4fbd-a90b-f83908b31626)
